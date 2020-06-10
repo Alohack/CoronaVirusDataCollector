@@ -1,15 +1,17 @@
 from abc import ABC, abstractmethod
 
+
 class Persistor(ABC):
 
-    def __init__(self, fileName):
-        self.fileName = fileName
+    def __init__(self, rawDataFile, csvDataFile):
+        self.rawDataFile = rawDataFile
+        self.csvDataFile = csvDataFile
 
     def csv_file_name(self):
-        return self.fileName + ".csv"
+        return self.csvDataFile
 
     def txt_file_name(self):
-        return self.fileName + ".txt"
+        return self.rawDataFile
 
     def read_raw_data(self):
         f = open(self.txt_file_name(), "r", encoding="utf-8")
@@ -32,4 +34,3 @@ class Persistor(ABC):
         data = f.read()
         f.close()
         return data
-
