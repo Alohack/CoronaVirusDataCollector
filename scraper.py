@@ -1,5 +1,4 @@
 import logging
-import requests
 
 
 from urllib.request import Request, urlopen

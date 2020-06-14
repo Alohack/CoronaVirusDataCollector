@@ -24,9 +24,8 @@ class Persistor(ABC):
         f.write(data)
         f.close()
 
-    def save_csv(self, data):
+    def create_csv(self):
         f = open(self.csv_file_name(), 'w', encoding="utf-8")
-        f.write(data)
         f.close()
 
     def read_csv(self):
