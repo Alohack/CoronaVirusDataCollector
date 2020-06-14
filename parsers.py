@@ -11,27 +11,17 @@ class Parser:
         # all countries are mt_a class objects
         soup = BeautifulSoup(content, features="html.parser")
         self.mt_aObjects = soup.findAll("a", {"class": "mt_a"})
-        self.currentCountryIndex = 0
 
     def __iter__(self):
-        return self
-
-    def __next__(self):
-        if self.currentCountryIndex >= Parser.NUMBER_OF_COUNTRIES:
-            self.currentCountryIndex = 0
-            raise StopIteration
-
-        countryParameters = self.get_next_parameters()
-        self.currentCountryIndex += 1
-
-        return countryParameters
+        for i in range(Parser.NUMBER_OF_COUNTRIES):
+            yield self.get_ith_parameters(i)
 
     @staticmethod
     def remove_needless_symbols_from(thisString):
         return ''.join(x for x in thisString if x != ',' and x != '+' and x != ' ')
 
-    def get_next_parameters(self):
-        currentTag = self.mt_aObjects[self.currentCountryIndex]
+    def get_ith_parameters(self, countryIndex):
+        currentTag = self.mt_aObjects[countryIndex]
 
         # the country name is our first parameter
         countryParameters = [currentTag.string]
