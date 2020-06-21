@@ -20,8 +20,8 @@ from parsers import Parser
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-RAW_DATA_FILE = "CovidData.txt"
-CSV_DATA_FILE = "CovidData.csv"
+RAW_DATA_FILE = "CovidData/CovidData.txt"
+CSV_DATA_FILE = "CovidData/CovidData.csv"
 
 
 def addRow(newRow):
@@ -80,11 +80,8 @@ def stats():
 if __name__ == '__main__':
     logger.info("Work started")
 
-    if sys.argv[1] == 'gather':
-        gather()
-    elif sys.argv[1] == 'parse':
-        parse()
-    elif sys.argv[1] == 'stats':
-        stats()
+    gather()
+    parse()
+    stats()
 
     logger.info("work ended")
