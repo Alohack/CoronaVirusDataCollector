@@ -1,5 +1,4 @@
-from abc import ABC
-from contextlib import contextmanager
+from abc import ABC, abstractmethod
 
 
 class Persistor(ABC):
@@ -8,45 +7,29 @@ class Persistor(ABC):
         self.rawDataFile = rawDataFile
         self.csvDataFile = csvDataFile
 
-    # this method provides the tool for using context manager
-    @contextmanager
-    def get_session(self, file_name, mode):
-        try:
-            session = open(file_name, mode, encoding="utf-8")
-            yield session
-        finally:
-            session.close()
-
-    # returns csv file name
     def csv_file_name(self):
         return self.csvDataFile
 
-    # returns txt file name
     def txt_file_name(self):
         return self.rawDataFile
 
-    # reads raw data
     def read_raw_data(self):
-        with self.get_session(self.txt_file_name(), "r") as f:
-            coronaVirusData = f.read()
+        f = open(self.txt_file_name(), "r", encoding="utf-8")
+        coronaVirusData = f.read()
+        f.close()
         return coronaVirusData
 
-    # saves raw data
     def save_raw_data(self, data):
-        with self.get_session(self.txt_file_name(), "w") as f:
-            f.write(data)
+        f = open(self.txt_file_name(), "w", encoding="utf-8")
+        f.write(data)
+        f.close()
 
-    # this function simply creates a csv file if it does not exist
-    # if it exists it will simply remove it's content
-    @contextmanager
     def create_csv(self):
-        try:
-            session = open(self.csv_file_name(), "w", encoding="utf-8")
-        finally:
-            session.close()
+        f = open(self.csv_file_name(), 'w', encoding="utf-8")
+        f.close()
 
-    # this function helps to read the csv file
     def read_csv(self):
-        with self.get_session(self.csv_file_name(), "r") as f:
-            data = f.read()
+        f = open(self.csv_file_name(), 'r', encoding="utf-8")
+        data = f.read()
+        f.close()
         return data

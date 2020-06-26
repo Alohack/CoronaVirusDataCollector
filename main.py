@@ -24,59 +24,46 @@ RAW_DATA_FILE = "CovidData/CovidData.txt"
 CSV_DATA_FILE = "CovidData/CovidData.csv"
 
 
-# adding new row to the csv file
-def add_row(new_row):
+def addRow(newRow):
     # Open file in append mode
     with open(CSV_DATA_FILE, 'a+', newline='', encoding='utf-8') as write_obj:
         # Create a writer object from csv module
         csv_writer = writer(write_obj)
         # Add contents of list as last row in the csv file
-        csv_writer.writerow(new_row)
+        csv_writer.writerow(newRow)
 
 
-# this function gathers raw data from the internet
-# and saves it to the RAW_DATA_FILE
 def gather():
     logger.info("gather")
 
-    # creating a persistor which will save our data
-    corona_virus_persistor = Persistor(RAW_DATA_FILE, CSV_DATA_FILE)
-    # creating a scraper which will scrape our data to the persistor
-    corona_virus_scraper = Scraper(corona_virus_persistor)
-    # scraping the data to the designated persistor
-    corona_virus_scraper.scrape()
+    coronaVirusPersistor = Persistor(RAW_DATA_FILE, CSV_DATA_FILE)
+    coronaVirusScraper = Scraper(coronaVirusPersistor)
+    coronaVirusScraper.scrape()
 
 
-# this function turns parser object to a csv file
-def parser_to_csv(corona_virus_parser):
+def parser_to_csv(coronaVirusDataParser):
     # Here are the names of the parameters
-    column_titles = ["TotalCases", "NewCases", "TotalDeaths", "NewDeaths",
-                     "TotalRecovered", "ActiveCases", "SeriousCritical", "Total1M",
-                     "Deaths1M", "TotalTests", "Tests1M", "Population", "Mainland"]
-    # adding as a first row for the csv file
-    add_row(column_titles)
+    columnTitles = ["TotalCases", "NewCases", "TotalDeaths", "NewDeaths",
+                    "TotalRecovered", "ActiveCases", "SeriousCritical", "Total1M",
+                    "Deaths1M", "TotalTests", "Tests1M", "Population", "Mainland"]
+    addRow(columnTitles)
 
-    # add to csv row by row the next data
-    for next_data in corona_virus_parser:
-        add_row(next_data)
+    # add to csv row by row
+    for nextData in coronaVirusDataParser:
+        addRow(nextData)
 
-# this function parses raw data to the csv file
+
 def parse():
     # parse gathered data and save as csv
     logger.info("parse")
 
-    # this persistor helps us to read from raw data file and write to csv data file
-    corona_virus_persistor = Persistor(RAW_DATA_FILE, CSV_DATA_FILE)
+    coronaVirusPersistor = Persistor(RAW_DATA_FILE, CSV_DATA_FILE)
+    coronaVirusData = coronaVirusPersistor.read_raw_data()
+    coronaVirusParser = Parser(coronaVirusData)
 
-    # this is our raw data as a string
-    corona_virus_data = corona_virus_persistor.read_raw_data()
-
-    corona_virus_persistor.create_csv()
-    # creating a parser object which will help us to turn raw data to csv
-    corona_virus_parser = Parser(corona_virus_data)
-
+    coronaVirusPersistor.create_csv()
     # Turning parser to csv file
-    parser_to_csv(corona_virus_parser)
+    parser_to_csv(coronaVirusParser)
 
 
 # Here I displayed 8 countries with the largest amounts of total cases of corona-virus
@@ -93,11 +80,8 @@ def stats():
 if __name__ == '__main__':
     logger.info("Work started")
 
-    if sys.argv[1] == 'gather':
-        gather()
-    elif sys.argv[1] == 'parse':
-        parse()
-    elif sys.argv[1] == 'stats':
-        stats()
+    gather()
+    parse()
+    stats()
 
     logger.info("work ended")
